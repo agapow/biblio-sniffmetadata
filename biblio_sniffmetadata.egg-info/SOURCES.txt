@@ -1,0 +1,12 @@
+README.txt
+setup.py
+biblio/__init__.py
+biblio/sniffmetadata/__init__.py
+biblio_sniffmetadata.egg-info/PKG-INFO
+biblio_sniffmetadata.egg-info/SOURCES.txt
+biblio_sniffmetadata.egg-info/dependency_links.txt
+biblio_sniffmetadata.egg-info/entry_points.txt
+biblio_sniffmetadata.egg-info/namespace_packages.txt
+biblio_sniffmetadata.egg-info/not-zip-safe
+biblio_sniffmetadata.egg-info/requires.txt
+biblio_sniffmetadata.egg-info/top_level.txt

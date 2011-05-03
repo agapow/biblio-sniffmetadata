@@ -1,0 +1,24 @@
+Metadata-Version: 1.0
+Name: biblio-sniffmetadata
+Version: 0.1
+Summary: Extract & extrapolate metadata from various ebook formats
+Home-page: http://www.agapow.net/software/biblio-sniffmetadata
+Author: Paul-Michael Agapow
+Author-email: pma@agapow.net
+License: GPL
+Description: Introduction
+        ============
+        
+        A simple framework for reading metadata from a variety of ebook formats
+        
+        Changelog
+        =========
+        
+        0.1dev (unreleased)
+        -------------------
+        
+        - Initial release
+        
+Keywords: ebook,metadata,epub,pdf
+Platform: UNKNOWN
+Classifier: Programming Language :: Python
