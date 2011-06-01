@@ -35,6 +35,8 @@ import os
 
 from biblio.bibrecord.dublin import fields as DUBLIN_FIELDS
 
+from basemetadatareader import BaseMetadataReader
+
 
 ### CONSTANTS & DEFINES
 
@@ -69,11 +71,14 @@ def tag_to_metval (xml_tag):
 	return MetaValue (val_name, clean_attribs(xml_tag.attrib))
 
 
-class EpubMetaReader (object):
-	def __init__ (self, path):
-		self.zip = ZipFile (path, mode='r')
+class EpubMetaReader (BaseMetadataReader):
+	def _open_file (self, path):
+		return ZipFile (path, mode='r')
 		
-	def get_metadata (self):
+	def _close_file (self):
+		self._file.close()
+		
+	def read_metadata (self):
 		"""
 		Search for and return metadata within the ebook.
 		
@@ -94,7 +99,7 @@ class EpubMetaReader (object):
 		# The date element has one optional OPF event attribute. The set of values
 		# for event are not defined by this specification; possible values may
 		# include: creation, publication, and modification.)
-		# Possible roles for creastors & contributors include:
+		# Possible roles for creators & contributors include:
 		# Artist [art]	 Use for a person (e.g., a painter) who conceives, and perhaps also implements, an original graphic design or work of art, if specific codes (e.g., [egr], [etr]) are not desired. For book illustrators, prefer Illustrator [ill].
 		# Author [aut]	 Use for a person or corporate body chiefly responsible for the intellectual or artistic content of a work. This term may also be used when more than one person or body bears such responsibility.
 		# Editor [edt]	 Use for a person who prepares for publication a work not primarily his/her own, such as by elucidating text, adding introductory or other critical matter, or technically directing an editorial staff.
@@ -104,15 +109,7 @@ class EpubMetaReader (object):
 		if contents:
 			con_tree = et.fromstring(contents)
 			metadata_tag = "{%s}metadata" % OPF_NS
-			m = con_tree.find(metadata_tag)
-			if m:
-				md_dict = MetadataDict()
-				for t in ['creator', 'contributor', 'identifier', 'date', 'publisher', 'language', 'title', 'description']:
-					elems = m.findall("{%s}%s" % (DC_NS, t))
-					if elems != []:
-						md_dict[t] = [tag_to_metval (x) for x in elems]
-				return md_dict
-		# no file, no xml or no metadata tag
+			return con_tree.find(metadata_tag)
 		return None
 		
 	def read_contents_file (self):
@@ -183,5 +180,15 @@ class EpubMetaReader (object):
 				return rootfile.attrib.get("full-path", None)
 		return None
 	
+	def munge_metadata_to_dublincore (self, raw_meta_data):
+		if raw_meta_data:
+			md_dict = MetadataDict()
+			for t in ['creator', 'contributor', 'identifier', 'date', 'publisher', 'language', 'title', 'description']:
+				elems = m.findall("{%s}%s" % (DC_NS, t))
+				if elems != []:
+					md_dict[t] = [tag_to_metval (x) for x in elems]
+			return md_dict
+		# no file, no xml or no metadata tag
+		return None
 	
 ### END #######################################################################
