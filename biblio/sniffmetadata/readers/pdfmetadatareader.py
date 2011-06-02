@@ -15,6 +15,17 @@ from basemetadatareader import BaseMetadataReader
 
 ### CONSTANTS & DEFINES
 
+# map fields from one schema to other
+DOCINFO_TO_DUBLIN = {
+	'Author': 'authors',
+	'Title': 'titles',
+	'CreationDate': 'date_created',
+	'ModDate': 'date_modified',
+	'Creator': 'creator',
+	'Producer': 'publishers',
+}
+
+
 ### IMPLEMENTATION ###
 
 def date_from_string (s):
@@ -39,6 +50,7 @@ class PdfMetaReader (BaseMetadataReader):
 				k = k[1:]
 			if v.startswith ('D:'):
 				v = date_from_string (v[2:])
+			
 			clean_dict[k] = v
 		return clean_dict
 		
